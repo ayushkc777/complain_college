@@ -1,6 +1,6 @@
+import 'package:complain_college/core/utils/colors.dart' show AppColors;
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-import '../utils/colors.dart';
 
 class CustomButton extends StatelessWidget {
   final String text;

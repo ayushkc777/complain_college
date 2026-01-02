@@ -1,7 +1,10 @@
+
+
+import 'package:complain_college/features/onboarding/presentation/pages/onboarding_screen2.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-import '../../utils/colors.dart';
-import 'onboarding_screen2.dart';
+
+import '../../../../core/utils/colors.dart';
 
 class OnboardingScreen1 extends StatelessWidget {
   const OnboardingScreen1({super.key});

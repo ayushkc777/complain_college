@@ -1,10 +1,13 @@
+
+
+import 'package:complain_college/features/onboarding/presentation/pages/onboarding_screen3.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
-import '../../utils/colors.dart';
-import '../auth/login_screen.dart';
 
-class OnboardingScreen3 extends StatelessWidget {
-  const OnboardingScreen3({super.key});
+import '../../../../core/utils/colors.dart';
+
+class OnboardingScreen2 extends StatelessWidget {
+  const OnboardingScreen2({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +25,7 @@ class OnboardingScreen3 extends StatelessWidget {
             SizedBox(
               height: 32.h,
               child: Image.asset(
-                "assets/images/onboarding3.png",
+                "assets/images/onboarding2.png",
                 fit: BoxFit.contain,
               ),
             ),
@@ -31,7 +34,7 @@ class OnboardingScreen3 extends StatelessWidget {
 
             // Title
             Text(
-              "Track Your Complaints",
+              "Submit Complaints Easily",
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 20.sp,
@@ -44,8 +47,8 @@ class OnboardingScreen3 extends StatelessWidget {
 
             // Description
             Text(
-              "Stay updated with real-time status updates on your "
-                  "submitted complaints. Everything is transparent.",
+              "Quickly report any issues in your college with photos "
+                  "and details. Your voice matters.",
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 15.sp,
@@ -55,7 +58,7 @@ class OnboardingScreen3 extends StatelessWidget {
 
             const Spacer(),
 
-            // Get Started button
+            // Next button
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
@@ -67,15 +70,15 @@ class OnboardingScreen3 extends StatelessWidget {
                   ),
                 ),
                 onPressed: () {
-                  Navigator.pushReplacement(
+                  Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const LoginScreen(),
+                      builder: (context) => const OnboardingScreen3(),
                     ),
                   );
                 },
                 child: Text(
-                  "Get Started",
+                  "Next",
                   style: TextStyle(
                     fontSize: 16.sp,
                     color: Colors.white,
