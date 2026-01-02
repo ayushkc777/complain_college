@@ -1,0 +1,11 @@
+[33m95e6be3[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mSprint-2[m[33m)[m complete sprint 2
+[33m5c8542e[m update light and dark theme
+[33mf9068c4[m update app font styling
+[33me78309e[m add profile screen UI
+[33m1e017f0[m add complaints screen UI
+[33m0555e59[m improve bottom navigation
+[33m11579b2[m update dashboard UI
+[33mc5fee15[m[33m ([m[1;31morigin/Sprint-2[m[33m)[m chore: configure fonts and responsive dependencies
+[33m6fc1762[m ui: dashboard home screen
+[33m95e1870[m style: apply global font and theme
+[33mc99690b[m[33m ([m[1;31morigin/main[m[33m, [m[1;32mmain[m[33m)[m first sprint clean

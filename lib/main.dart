@@ -1,44 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:responsive_sizer/responsive_sizer.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'app/app.dart';
+import 'core/constants/hive_constant.dart';
 
-import 'screens/splash/splash_screen.dart';
-
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  await Hive.openBox(HiveConstants.usersBox); // Open once
   runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return ResponsiveSizer(
-      builder: (context, orientation, screenType) {
-        return MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'Complain College',
-
-          // Theme + Font (Sprint 2 requirement)
-          themeMode: ThemeMode.system,
-          theme: ThemeData(
-            useMaterial3: true,
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
-            textTheme: GoogleFonts.poppinsTextTheme(),
-          ),
-          darkTheme: ThemeData(
-            useMaterial3: true,
-            brightness: Brightness.dark,
-            colorScheme: ColorScheme.fromSeed(
-              seedColor: Colors.indigo,
-              brightness: Brightness.dark,
-            ),
-            textTheme: GoogleFonts.poppinsTextTheme(),
-          ),
-
-          home: const SplashScreen(),
-        );
-      },
-    );
-  }
 }
