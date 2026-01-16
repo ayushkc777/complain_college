@@ -13,7 +13,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.bgWhite,
       body: SafeArea(
-        child: SingleChildScrollView(   // <-- FIXED HERE
+        child: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

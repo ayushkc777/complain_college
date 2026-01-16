@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../../../core/utils/colors.dart';
-import '../../data/datasources/auth_local_datasource.dart';
+import '../../data/datasources/auth_remote_datasource.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -17,7 +17,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final confirmController = TextEditingController();
 
   bool obscurePassword = true;
-  bool obscureConfirm = true;
   bool isLoading = false;
 
   @override
@@ -30,17 +29,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   void handleRegister() async {
-    final name = nameController.text.trim();
     final email = emailController.text.trim();
     final password = passwordController.text.trim();
     final confirm = confirmController.text.trim();
 
-    if (name.isEmpty || email.isEmpty || password.isEmpty || confirm.isEmpty) {
+    if (email.isEmpty || password.isEmpty || confirm.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please fill all fields')),
       );
       return;
     }
+
     if (password != confirm) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Passwords do not match')),
@@ -49,13 +48,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
 
     setState(() => isLoading = true);
-    final auth = AuthLocalDatasource();
-    final result = await auth.signUp(email: email, password: password);
+
+    final auth = AuthRemoteDatasource();
+    final result =
+    await auth.register(email: email, password: password);
+
     setState(() => isLoading = false);
 
-    if (result == 'Sign up successful') {
+    if (result == 'success') {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Account created! Please login')),
+        const SnackBar(
+            content: Text('Account created! Please login')),
       );
       Navigator.pop(context);
     } else {
@@ -75,76 +78,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
             padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 4.h),
             child: Column(
               children: [
-                // Header
-                Container(
-                  padding: EdgeInsets.all(4.w),
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [AppColors.primaryBlue, AppColors.primaryBlue.withOpacity(0.8)],
-                    ),
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 12, offset: Offset(0, 6))],
-                  ),
-                  child: Column(
-                    children: [
-                      Icon(Icons.person_add_rounded, size: 48, color: Colors.white),
-                      SizedBox(height: 1.h),
-                      Text("Create Account",
-                          style: TextStyle(fontSize: 22.sp, fontWeight: FontWeight.bold, color: Colors.white)),
-                      SizedBox(height: 0.5.h),
-                      Text("Register to get started",
-                          style: TextStyle(fontSize: 16.sp, color: Colors.white70)),
-                    ],
-                  ),
-                ),
+                _header(),
                 SizedBox(height: 4.h),
-
-                // Form Card
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 3.h),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: [
-                      BoxShadow(color: Colors.black12.withOpacity(0.06), blurRadius: 12, offset: Offset(0, 6))
-                    ],
-                  ),
-                  child: Column(
-                    children: [
-                      _inputField(nameController, "Full Name", icon: Icons.person_outline_rounded),
-                      SizedBox(height: 2.h),
-                      _inputField(emailController, "Email Address", icon: Icons.email_outlined),
-                      SizedBox(height: 2.h),
-                      _inputField(passwordController, "Password", obscure: true, icon: Icons.lock_outline_rounded),
-                      SizedBox(height: 2.h),
-                      _inputField(confirmController, "Confirm Password", obscure: true, icon: Icons.lock_outline_rounded),
-                      SizedBox(height: 4.h),
-
-                      // Register Button
-                      SizedBox(
-                        width: double.infinity,
-                        height: 6.h,
-                        child: ElevatedButton(
-                          onPressed: isLoading ? null : handleRegister,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.primaryBlue,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                          ),
-                          child: isLoading
-                              ? CircularProgressIndicator(color: Colors.white)
-                              : Text("Register", style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold)),
-                        ),
-                      ),
-                      SizedBox(height: 2.h),
-
-                      TextButton(
-                        onPressed: () => Navigator.pop(context),
-                        child: Text("Already have an account? Login",
-                            style: TextStyle(color: AppColors.primaryBlue, fontSize: 15.sp)),
-                      ),
-                    ],
-                  ),
-                ),
+                _formCard(),
               ],
             ),
           ),
@@ -153,8 +89,92 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  Widget _inputField(TextEditingController controller, String hint,
-      {bool obscure = false, IconData? icon}) {
+  Widget _header() {
+    return Container(
+      padding: EdgeInsets.all(4.w),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            AppColors.primaryBlue,
+            AppColors.primaryBlue.withOpacity(0.8),
+          ],
+        ),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        children: [
+          const Icon(Icons.person_add_rounded,
+              size: 48, color: Colors.white),
+          SizedBox(height: 1.h),
+          Text(
+            "Create Account",
+            style: TextStyle(
+              fontSize: 22.sp,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+          SizedBox(height: 0.5.h),
+          Text(
+            "Register to get started",
+            style: TextStyle(fontSize: 16.sp, color: Colors.white70),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _formCard() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 3.h),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        children: [
+          _inputField(nameController, "Full Name",
+              icon: Icons.person_outline),
+          SizedBox(height: 2.h),
+          _inputField(emailController, "Email Address",
+              icon: Icons.email_outlined),
+          SizedBox(height: 2.h),
+          _inputField(passwordController, "Password",
+              obscure: true, icon: Icons.lock_outline),
+          SizedBox(height: 2.h),
+          _inputField(confirmController, "Confirm Password",
+              obscure: true, icon: Icons.lock_outline),
+          SizedBox(height: 4.h),
+          SizedBox(
+            width: double.infinity,
+            height: 6.h,
+            child: ElevatedButton(
+              onPressed: isLoading ? null : handleRegister,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primaryBlue,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)),
+              ),
+              child: isLoading
+                  ? const CircularProgressIndicator(color: Colors.white)
+                  : Text(
+                "Register",
+                style: TextStyle(
+                    fontSize: 18.sp, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _inputField(
+      TextEditingController controller,
+      String hint, {
+        bool obscure = false,
+        IconData? icon,
+      }) {
     return TextField(
       controller: controller,
       obscureText: obscure ? obscurePassword : false,
@@ -163,7 +183,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
         hintText: hint,
         filled: true,
         fillColor: AppColors.bgWhite,
-        contentPadding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: BorderSide.none,
@@ -171,7 +190,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
         suffixIcon: obscure
             ? IconButton(
           icon: Icon(
-            obscurePassword ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+            obscurePassword
+                ? Icons.visibility_outlined
+                : Icons.visibility_off_outlined,
             color: AppColors.primaryBlue,
           ),
           onPressed: () {

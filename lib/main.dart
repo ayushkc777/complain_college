@@ -6,6 +6,6 @@ import 'core/constants/hive_constant.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
-  await Hive.openBox(HiveConstants.usersBox); // Open once
+  await Hive.openBox(HiveConstants.usersBox);
   runApp(const MyApp());
 }
