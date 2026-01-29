@@ -66,6 +66,14 @@ class ProfileTab extends StatelessWidget {
                           color: AppColors.textGrey,
                         ),
                       ),
+                      SizedBox(height: 0.5.h),
+                      Text(
+                        "ID: 230249",
+                        style: TextStyle(
+                          fontSize: 13.sp,
+                          color: AppColors.textGrey,
+                        ),
+                      ),
                     ],
                   ),
                 ],
