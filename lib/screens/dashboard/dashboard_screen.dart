@@ -67,6 +67,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
           selectedItemColor: AppColors.primaryBlue,
           unselectedItemColor: AppColors.textGrey,
           showUnselectedLabels: true,
+          selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w600),
+          unselectedLabelStyle: const TextStyle(fontWeight: FontWeight.w500),
           items: const [
             BottomNavigationBarItem(
               icon: Icon(Icons.home_outlined),
