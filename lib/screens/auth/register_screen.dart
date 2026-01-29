@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../utils/colors.dart';
+import '../../utils/hive_service.dart';
 import 'login_screen.dart';
 import '../dashboard/dashboard_screen.dart';
 
@@ -119,7 +120,45 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     borderRadius: BorderRadius.circular(14),
                   ),
                 ),
-                onPressed: () {
+                onPressed: () async {
+                  final name = nameController.text.trim();
+                  final email = emailController.text.trim();
+                  final pass = passController.text;
+                  final confirm = confirmPassController.text;
+
+                  if (name.isEmpty || email.isEmpty || pass.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("Please fill in all fields"),
+                      ),
+                    );
+                    return;
+                  }
+                  if (pass != confirm) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("Passwords do not match"),
+                      ),
+                    );
+                    return;
+                  }
+                  if (HiveService.userExists(email)) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("Account already exists. Please login."),
+                      ),
+                    );
+                    return;
+                  }
+
+                  await HiveService.saveUser(
+                    name: name,
+                    email: email,
+                    password: pass,
+                  );
+                  await HiveService.setCurrentUser(email);
+
+                  if (!context.mounted) return;
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
