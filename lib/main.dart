@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'utils/colors.dart';
 import 'screens/splash/splash_screen.dart';
 
 void main() {
@@ -23,14 +24,23 @@ class MyApp extends StatelessWidget {
           themeMode: ThemeMode.system,
           theme: ThemeData(
             useMaterial3: true,
-            colorScheme: ColorScheme.fromSeed(seedColor: Colors.indigo),
-            textTheme: GoogleFonts.poppinsTextTheme(),
+            scaffoldBackgroundColor: AppColors.bgWhite,
+            colorScheme: ColorScheme.fromSeed(seedColor: AppColors.primaryBlue),
+            textTheme: GoogleFonts.poppinsTextTheme().apply(
+              bodyColor: AppColors.textDark,
+              displayColor: AppColors.textDark,
+            ),
+            appBarTheme: const AppBarTheme(
+              backgroundColor: AppColors.bgWhite,
+              foregroundColor: AppColors.textDark,
+              elevation: 0,
+            ),
           ),
           darkTheme: ThemeData(
             useMaterial3: true,
             brightness: Brightness.dark,
             colorScheme: ColorScheme.fromSeed(
-              seedColor: Colors.indigo,
+              seedColor: AppColors.primaryBlue,
               brightness: Brightness.dark,
             ),
             textTheme: GoogleFonts.poppinsTextTheme(),
