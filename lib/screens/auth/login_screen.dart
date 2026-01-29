@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../utils/colors.dart';
+import '../../utils/hive_service.dart';
 import 'register_screen.dart';
 import '../dashboard/dashboard_screen.dart';
 
@@ -132,7 +133,40 @@ class _LoginScreenState extends State<LoginScreen> {
                     borderRadius: BorderRadius.circular(14),
                   ),
                 ),
-                onPressed: () {
+                onPressed: () async {
+                  final email = emailController.text.trim();
+                  final pass = passwordController.text;
+
+                  if (email.isEmpty || pass.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("Please enter email and password"),
+                      ),
+                    );
+                    return;
+                  }
+
+                  final user = HiveService.getUser(email);
+                  if (user == null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("Account not found. Please register."),
+                      ),
+                    );
+                    return;
+                  }
+
+                  if ((user['password'] ?? '') != pass) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("Invalid password"),
+                      ),
+                    );
+                    return;
+                  }
+
+                  await HiveService.setCurrentUser(email);
+                  if (!context.mounted) return;
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
