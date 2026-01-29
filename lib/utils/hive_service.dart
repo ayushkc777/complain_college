@@ -40,6 +40,10 @@ class HiveService {
     await _sessionBox().put(_sessionKey, email.toLowerCase());
   }
 
+  static Future<void> clearCurrentUser() async {
+    await _sessionBox().delete(_sessionKey);
+  }
+
   static String? getCurrentUserEmail() {
     return _sessionBox().get(_sessionKey);
   }
