@@ -87,10 +87,22 @@ class AppDrawer extends StatelessWidget {
             const Spacer(),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 2.h),
-              child: _drawerItem(
-                icon: Icons.logout,
-                label: "Logout",
-                onTap: () {},
+              child: Column(
+                children: [
+                  _drawerItem(
+                    icon: Icons.logout,
+                    label: "Logout",
+                    onTap: () {},
+                  ),
+                  SizedBox(height: 1.5.h),
+                  Text(
+                    "v1.0 • Softwarica",
+                    style: TextStyle(
+                      color: AppColors.textGrey,
+                      fontSize: 13.sp,
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
