@@ -63,6 +63,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           },
           backgroundColor: Colors.white,
           elevation: 0,
+          type: BottomNavigationBarType.fixed,
           selectedItemColor: AppColors.primaryBlue,
           unselectedItemColor: AppColors.textGrey,
           showUnselectedLabels: true,
