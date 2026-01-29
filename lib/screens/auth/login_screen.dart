@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:dio/dio.dart';
 import '../../utils/colors.dart';
 import '../../utils/hive_service.dart';
+import '../../utils/api_service.dart';
 import 'register_screen.dart';
 import '../dashboard/dashboard_screen.dart';
 
@@ -158,33 +160,43 @@ class _LoginScreenState extends State<LoginScreen> {
                     return;
                   }
 
-                  final user = HiveService.getUser(email);
-                  if (user == null) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text("Account not found. Please register."),
+                  try {
+                    final response = await ApiService.login(
+                      email: email,
+                      password: pass,
+                    );
+                    final data = response['data'];
+                    final token = response['token'];
+                    if (data is Map<String, dynamic>) {
+                      await HiveService.saveUserFromApi(data: data);
+                    }
+                    if (token is String && token.isNotEmpty) {
+                      await HiveService.setAuthToken(token);
+                    }
+                    await HiveService.setCurrentUser(email);
+
+                    if (!context.mounted) return;
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const DashboardScreen(),
                       ),
                     );
-                    return;
-                  }
-
-                  if ((user['password'] ?? '') != pass) {
+                  } on DioException catch (e) {
+                    final message = (e.response?.data is Map &&
+                            e.response?.data['message'] != null)
+                        ? e.response?.data['message'].toString()
+                        : "Login failed";
+                    if (!context.mounted) return;
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text("Invalid password"),
-                      ),
+                      SnackBar(content: Text(message)),
                     );
-                    return;
+                  } catch (_) {
+                    if (!context.mounted) return;
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("Login failed")),
+                    );
                   }
-
-                  await HiveService.setCurrentUser(email);
-                  if (!context.mounted) return;
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const DashboardScreen(),
-                    ),
-                  );
                 },
                 child: Text(
                   "Login",
