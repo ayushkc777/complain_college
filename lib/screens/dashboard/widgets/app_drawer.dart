@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../../utils/colors.dart';
+import '../../../utils/hive_service.dart';
+import '../../auth/login_screen.dart';
 
 class AppDrawer extends StatelessWidget {
   final ValueChanged<int> onSelect;
@@ -92,7 +94,16 @@ class AppDrawer extends StatelessWidget {
                   _drawerItem(
                     icon: Icons.logout,
                     label: "Logout",
-                    onTap: () {},
+                    onTap: () async {
+                      await HiveService.clearCurrentUser();
+                      if (!context.mounted) return;
+                      Navigator.of(context).pushAndRemoveUntil(
+                        MaterialPageRoute(
+                          builder: (context) => const LoginScreen(),
+                        ),
+                        (route) => false,
+                      );
+                    },
                   ),
                   SizedBox(height: 1.5.h),
                   Text(
