@@ -30,6 +30,24 @@ class ComplaintsTab extends StatelessWidget {
               ),
             ),
             SizedBox(height: 3.h),
+            Row(
+              children: [
+                Expanded(
+                  child: _quickAction(
+                    icon: Icons.add_comment_outlined,
+                    label: "New",
+                  ),
+                ),
+                SizedBox(width: 3.w),
+                Expanded(
+                  child: _quickAction(
+                    icon: Icons.filter_list_rounded,
+                    label: "Filter",
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 2.5.h),
             _statusCard(
               title: "Open Complaints",
               value: "4",
@@ -45,6 +63,31 @@ class ComplaintsTab extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _quickAction({required IconData icon, required String label}) {
+    return Container(
+      padding: EdgeInsets.symmetric(vertical: 1.6.h),
+      decoration: BoxDecoration(
+        color: AppColors.cardBg,
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(icon, color: AppColors.primaryBlue),
+          SizedBox(width: 2.w),
+          Text(
+            label,
+            style: TextStyle(
+              color: AppColors.textDark,
+              fontSize: 15.sp,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
       ),
     );
   }
