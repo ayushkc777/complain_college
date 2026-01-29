@@ -1,9 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../utils/colors.dart';
+import '../../utils/hive_service.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  String _displayName = "Student";
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserName();
+  }
+
+  void _loadUserName() {
+    final name = HiveService.getCurrentUserName();
+    if (name != null && name.trim().isNotEmpty) {
+      setState(() {
+        _displayName = name.trim();
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +73,7 @@ class HomeScreen extends StatelessWidget {
 
               // Greeting
               Text(
-                "Hello Ayush 👋",
+                "Hello $_displayName 👋",
                 style: TextStyle(
                   color: AppColors.textDark,
                   fontSize: 20.sp,
