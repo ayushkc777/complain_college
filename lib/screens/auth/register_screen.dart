@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:dio/dio.dart';
 import '../../utils/colors.dart';
 import '../../utils/hive_service.dart';
+import '../../utils/api_service.dart';
 import 'login_screen.dart';
 import '../dashboard/dashboard_screen.dart';
 
@@ -162,29 +164,40 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     );
                     return;
                   }
-                  if (HiveService.userExists(email)) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text("Account already exists. Please login."),
+                  try {
+                    final response = await ApiService.register(
+                      name: name,
+                      email: email,
+                      password: pass,
+                    );
+                    final data = response['data'];
+                    if (data is Map<String, dynamic>) {
+                      await HiveService.saveUserFromApi(data: data);
+                      await HiveService.setCurrentUser(email);
+                    }
+
+                    if (!context.mounted) return;
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const DashboardScreen(),
                       ),
                     );
-                    return;
+                  } on DioException catch (e) {
+                    final message = (e.response?.data is Map &&
+                            e.response?.data['message'] != null)
+                        ? e.response?.data['message'].toString()
+                        : "Signup failed";
+                    if (!context.mounted) return;
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(message)),
+                    );
+                  } catch (_) {
+                    if (!context.mounted) return;
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text("Signup failed")),
+                    );
                   }
-
-                  await HiveService.saveUser(
-                    name: name,
-                    email: email,
-                    password: pass,
-                  );
-                  await HiveService.setCurrentUser(email);
-
-                  if (!context.mounted) return;
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const DashboardScreen(),
-                    ),
-                  );
                 },
                 child: Text(
                   "Register",
