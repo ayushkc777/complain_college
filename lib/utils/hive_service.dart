@@ -57,6 +57,11 @@ class HiveService {
     await _sessionBox().delete(_tokenKey);
   }
 
+  static Future<void> clearSession() async {
+    await _sessionBox().delete(_sessionKey);
+    await _sessionBox().delete(_tokenKey);
+  }
+
   static Future<void> saveUserFromApi({
     required Map<String, dynamic> data,
   }) async {
