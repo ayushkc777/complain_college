@@ -18,6 +18,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final passController = TextEditingController();
   final confirmPassController = TextEditingController();
 
+  bool _isValidEmail(String email) {
+    return RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(email);
+  }
+
   // Screen design
   @override
   Widget build(BuildContext context) {
@@ -134,10 +138,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     );
                     return;
                   }
+                  if (!_isValidEmail(email)) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("Please enter a valid email"),
+                      ),
+                    );
+                    return;
+                  }
                   if (pass != confirm) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text("Passwords do not match"),
+                      ),
+                    );
+                    return;
+                  }
+                  if (pass.length < 6) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("Password must be at least 6 characters"),
                       ),
                     );
                     return;
