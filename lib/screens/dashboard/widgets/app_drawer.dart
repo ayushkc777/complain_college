@@ -95,8 +95,7 @@ class AppDrawer extends StatelessWidget {
                     icon: Icons.logout,
                     label: "Logout",
                     onTap: () async {
-                      await HiveService.clearCurrentUser();
-                      await HiveService.clearAuthToken();
+                      await HiveService.clearSession();
                       if (!context.mounted) return;
                       Navigator.of(context).pushAndRemoveUntil(
                         MaterialPageRoute(
