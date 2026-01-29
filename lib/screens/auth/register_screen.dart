@@ -184,10 +184,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                     );
                   } on DioException catch (e) {
-                    final message = (e.response?.data is Map &&
-                            e.response?.data['message'] != null)
-                        ? e.response?.data['message'].toString()
-                        : "Signup failed";
+                    final String message =
+                        (e.response?.data as Map?)?['message']?.toString() ??
+                            "Signup failed";
                     if (!context.mounted) return;
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text(message)),
