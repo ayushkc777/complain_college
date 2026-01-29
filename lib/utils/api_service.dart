@@ -13,6 +13,10 @@ class ApiService {
     ),
   );
 
+  static void setBaseUrl(String baseUrl) {
+    _dio.options.baseUrl = baseUrl;
+  }
+
   static Future<Map<String, dynamic>> register({
     required String name,
     required String email,
