@@ -16,6 +16,10 @@ class _LoginScreenState extends State<LoginScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
+  bool _isValidEmail(String email) {
+    return RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(email);
+  }
+
   // Screen design
   @override
   Widget build(BuildContext context) {
@@ -141,6 +145,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text("Please enter email and password"),
+                      ),
+                    );
+                    return;
+                  }
+                  if (!_isValidEmail(email)) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("Please enter a valid email"),
                       ),
                     );
                     return;
