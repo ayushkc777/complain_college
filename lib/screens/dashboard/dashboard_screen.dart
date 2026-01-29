@@ -38,6 +38,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: AppColors.primaryBlue,
+        tooltip: "New Complaint",
         onPressed: () {},
         child: const Icon(Icons.add, color: Colors.white),
       ),
