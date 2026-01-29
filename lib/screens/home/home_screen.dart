@@ -7,24 +7,33 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.bgWhite,
-      body: SafeArea(
-        child: SingleChildScrollView(   // <-- FIXED HERE
+    return Container(
+      color: AppColors.bgWhite,
+      child: SafeArea(
+        child: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 2.h),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Top bar
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    "College Complaint",
-                    style: TextStyle(
+                  Builder(
+                    builder: (context) => IconButton(
+                      onPressed: () => Scaffold.of(context).openDrawer(),
+                      icon: const Icon(Icons.menu_rounded),
                       color: AppColors.textDark,
-                      fontSize: 19.sp,
-                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  SizedBox(width: 1.w),
+                  Expanded(
+                    child: Text(
+                      "College Complaint",
+                      style: TextStyle(
+                        color: AppColors.textDark,
+                        fontSize: 19.sp,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                   ),
                   CircleAvatar(
@@ -248,47 +257,6 @@ class HomeScreen extends StatelessWidget {
             ],
           ),
         ),
-      ),
-
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: AppColors.primaryBlue,
-        onPressed: () {},
-        child: const Icon(Icons.add, color: Colors.white),
-      ),
-
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black12.withOpacity(0.05),
-              blurRadius: 8,
-              offset: const Offset(0, -2),
-            )
-          ],
-        ),
-        child: BottomNavigationBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          selectedItemColor: AppColors.primaryBlue,
-          unselectedItemColor: AppColors.textGrey,
-          showUnselectedLabels: true,
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home_outlined),
-              label: "Home",
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.list_alt_outlined),
-              label: "Complaints",
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person_outline),
-              label: "Profile",
-            ),
-          ],
-        ),
-      ),
     );
   }
 
