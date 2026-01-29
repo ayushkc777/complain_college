@@ -6,6 +6,7 @@ class HiveService {
   static const String _usersBoxName = 'users';
   static const String _sessionBoxName = 'session';
   static const String _sessionKey = 'current_user_email';
+  static const String _tokenKey = 'auth_token';
 
   static Future<void> init() async {
     await Hive.initFlutter();
@@ -44,6 +45,29 @@ class HiveService {
     await _sessionBox().delete(_sessionKey);
   }
 
+  static Future<void> setAuthToken(String token) async {
+    await _sessionBox().put(_tokenKey, token);
+  }
+
+  static String? getAuthToken() {
+    return _sessionBox().get(_tokenKey);
+  }
+
+  static Future<void> clearAuthToken() async {
+    await _sessionBox().delete(_tokenKey);
+  }
+
+  static Future<void> saveUserFromApi({
+    required Map<String, dynamic> data,
+  }) async {
+    final email = (data['email'] ?? '').toString().toLowerCase();
+    if (email.isEmpty) return;
+    await _usersBox().put(email, {
+      'name': data['name'] ?? '',
+      'email': email,
+      'password': data['password'] ?? '',
+    });
+  }
   static String? getCurrentUserEmail() {
     return _sessionBox().get(_sessionKey);
   }
